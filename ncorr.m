@@ -2676,7 +2676,11 @@ classdef ncorr < handle
                                     % This is Microsoft visual studio
                                     % Openmp flag is /openmp
                                     flags_f = horzcat(flags_f{:},{'COMPFLAGS="$COMPFLAGS'},{'/openmp'},{'/DNCORR_OPENMP"'});
-                                elseif (~isempty(strfind(compiler,'g++'))) %#ok<STREMP>
+                                elseif (~isempty(strfind(compiler,'g++')) && ispc) %#ok<STREMP>
+                                    % This is the GNU compiler on Windows
+                                    % OS.
+                                    flags_f = horzcat(flags_f{:},{'CXXFLAGS="$CXXFLAGS'},{'-fopenmp"'},{'LDFLAGS="$LDFLAGS'},{'-fopenmp"'});
+                                elseif (~isempty(strfind(compiler,'g++')) && isunix) %#ok<STREMP>
                                     % This is the GNU compiler; this is 
                                     % assumed to be Linux.
                                     % NOTE: GCC must manually link 
